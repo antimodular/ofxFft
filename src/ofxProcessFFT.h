@@ -12,7 +12,7 @@ public:
         
     ofxEasyFft fft;
     
-    void setup(); //whether you want your sounds in a 0-1 range or a 0-volumeRange - setting volume range doesn't matter if you're normalizing
+    void setup(bool _useMic = true, int _numBins = 16384); //whether you want your sounds in a 0-1 range or a 0-volumeRange - setting volume range doesn't matter if you're normalizing
     void update();
     //For Debugging audio trends
     void drawHistoryGraph(ofPoint pt, fftRangeType drawType);
@@ -32,6 +32,7 @@ public:
     
     float getIntensityAtFrequency(float _freq);
     vector<float> getSpectrum();
+    float getSpectrumAt( int _index);
     
     
     int getNumFFTbins();
@@ -49,11 +50,11 @@ public:
     void drawDebug();
     
 
-    
+    int     volumeRange; //use if you're not normalizing so you can give things a proper range for visualization
+
 private:
     
     bool    normalize; //decide if you want the values between 0 and 1 or between 0 - 1000
-    int     volumeRange; //use if you're not normalizing so you can give things a proper range for visualization
     
     int     scaleFactor; //this is arbitrary - it raises the FFT numbers so they aren't 0.0000054
     int     numBins;

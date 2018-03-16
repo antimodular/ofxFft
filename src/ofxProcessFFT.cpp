@@ -1,11 +1,11 @@
 #include "ofxProcessFFT.h"
 
-void ProcessFFT::setup(){
+void ProcessFFT::setup(bool _useMic, int _numBins){
     
     scaleFactor = 10000;
-    numBins = 16384;
+    numBins = _numBins;
     
-    fft.setup(numBins); //default
+    fft.setup(numBins,_useMic); //default
     fft.setUseNormalization(false);
     
     graphMaxSize = 200; //approx 10sec of history at 60fps
@@ -305,6 +305,7 @@ void ProcessFFT::drawBars(){
     ofPushStyle();
     ofSetRectMode(OF_RECTMODE_CORNER);
     ofSetLineWidth(2);
+        
     for(int i=0; i<fftSpectrum.size(); i++){ //for the number of columns
         if (i==loudestBand) {
             ofSetColor(255,0,0);
@@ -411,6 +412,9 @@ float ProcessFFT::getSmoothedUnScaledLoudestValue(){
 
 vector<float> ProcessFFT::getSpectrum(){
     return fftSpectrum;
+}
+float ProcessFFT::getSpectrumAt( int _index){
+    return fftSpectrum[_index];
 }
 
 float ProcessFFT::getNoisiness(){

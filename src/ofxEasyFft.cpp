@@ -4,10 +4,10 @@ ofxEasyFft::ofxEasyFft()
 :useNormalization(true) {
 }
 ofxEasyFft::~ofxEasyFft(){
-    stream.close();
+    if(bUseMic) stream.close();
 }
 
-void ofxEasyFft::setup(int bufferSize, fftWindowType windowType, fftImplementation implementation, int audioBufferSize, int audioSampleRate) {
+void ofxEasyFft::setup(int bufferSize,  bool _useMic, fftWindowType windowType, fftImplementation implementation, int audioBufferSize, int audioSampleRate) {
 	if(bufferSize < audioBufferSize) {
 		ofLogWarning("ofxEasyFft") << "bufferSize (" << bufferSize << ") less than audioBufferSize (" << audioBufferSize << "), using " << audioBufferSize;
 		bufferSize = audioBufferSize;
@@ -21,9 +21,12 @@ void ofxEasyFft::setup(int bufferSize, fftWindowType windowType, fftImplementati
 	audioBack.resize(bufferSize);
 	audioRaw.resize(bufferSize);
 	
-    stream.getDeviceList();
-    stream.setup(0, 1, audioSampleRate, audioBufferSize, 2);
-    stream.setInput(this);
+    bUseMic = _useMic;
+    if(bUseMic){
+        stream.getDeviceList();
+        stream.setup(0, 1, audioSampleRate, audioBufferSize, 2);
+        stream.setInput(this);
+    }
 }
 
 void ofxEasyFft::setUseNormalization(bool useNormalization) {
