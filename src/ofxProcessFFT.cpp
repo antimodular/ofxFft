@@ -1,5 +1,33 @@
 #include "ofxProcessFFT.h"
 
+void ProcessFFT::setupWithoutMic(int _numBins){
+    scaleFactor = 10000;
+    numBins = _numBins;
+    
+    fft.setupWithoutMic(numBins); //default
+    fft.setUseNormalization(false);
+    
+    graphMaxSize = 200; //approx 10sec of history at 60fps
+    
+    graphLow.assign(graphMaxSize, 0.0);
+    graphMid.assign(graphMaxSize, 0.0);
+    graphHigh.assign(graphMaxSize, 0.0);
+    graphSuperLow.assign(graphMaxSize, 0.0);
+    graphMaxSound.assign(graphMaxSize, 200.0);
+    
+    saveHistory = false;
+    
+    exponent = 1.0;
+    
+    numFFTbins = 32;
+    FFTpercentage = 0.14;
+    
+    delta = loudestBand = noisiness = maxSound = avgMaxSoundOverTime = 0;
+    
+    normalize = false;
+    volumeRange = 400; //only used if normalize is false
+}
+
 void ProcessFFT::setup(){
     
     scaleFactor = 10000;
